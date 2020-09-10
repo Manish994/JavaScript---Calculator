@@ -171,11 +171,39 @@ function calculator(button) {
       data.operation = [];
       data.result = [];
       updateOutputResult(0);
-    } else if (button.name === "del") {
+    } else if (button.name === "delete") {
+      debugger;
       data.operation.pop();
       data.result.pop();
     }
   } else if (button.type === "calculate") {
+    //join method join multiple indexNumber into single
+    //and join value is inside string.
+    let joinResult = data.result.join("");
+    //consider addition but value is in integer inside string("20+30")
+    //eval method evaluates string values & executes it.
+    let result = eval(joinResult);
+    updateOutputResult(result);
+
+    data.operation = [];
+    data.result = [];
+
+    //For further calculation so need to push
+    data.operation.push(result);
+    data.result.push(result);
+
+    return;
+    //if i don't use return then updateOutputOperation function is executed.It display operationValue to the user Interface.
   }
   updateOutputOperation(data.operation.join(""));
+}
+
+//
+//Joining Array value & then value is in string
+//Each array index value join in string
+function updateOutputOperation(operation) {
+  operationValueElement.innerHTML = operation;
+}
+function updateOutputResult(result) {
+  resultValueElement.innerHTML = result;
 }
