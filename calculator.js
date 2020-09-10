@@ -172,7 +172,6 @@ function calculator(button) {
       data.result = [];
       updateOutputResult(0);
     } else if (button.name === "delete") {
-      debugger;
       data.operation.pop();
       data.result.pop();
     }
@@ -183,6 +182,10 @@ function calculator(button) {
     //consider addition but value is in integer inside string("20+30")
     //eval method evaluates string values & executes it.
     let result = eval(joinResult);
+
+    //if number is greater then 10 digit
+    //then execute formatResult function
+    result = formatResult(result);
     updateOutputResult(result);
 
     data.operation = [];
@@ -206,4 +209,41 @@ function updateOutputOperation(operation) {
 }
 function updateOutputResult(result) {
   resultValueElement.innerHTML = result;
+}
+
+//formatResult Function
+function formatResult(result) {
+  const maxOutputNumberLength = 10;
+  //if number is greater than 10 (2.1245+e7);
+  //toPrecision doesn't count (.)
+  const outputPrecision = 5;
+
+  if (digitCounter(result) > maxOutputNumberLength) {
+    //check result is float or not
+    if (isFloat(result)) {
+      //number is inside string convert into integer
+      //doesn't count after decimal number
+      const resultInt = parseInt(result);
+      const resultIntLength = digitCounter(resultInt);
+      if (resultIntLength > maxOutputNumberLength) {
+        return result.toPrecision(outputPrecision);
+      } else {
+        let num_of_digits_after_point = maxOutputNumberLength - resultIntLength;
+        return result.toFixed(num_of_digits_after_point);
+      }
+    } else {
+      //if number is integer
+      return result.toPrecision(outputPrecision);
+    }
+  } else {
+    //if number is less than 10 digit then return result
+    return result;
+  }
+}
+
+function digitCounter(number) {
+  return number.toString().length;
+}
+function isFloat(number) {
+  return number % 1 != 0;
 }
