@@ -181,11 +181,21 @@ function calculator(button) {
     let joinResult = data.result.join("");
     //consider addition but value is in integer inside string("20+30")
     //eval method evaluates string values & executes it.
-    let result = eval(joinResult);
+    let result;
+    try {
+      result = eval(joinResult);
+    } catch (error) {
+      if (error instanceof SyntaxError) {
+        result = "Syntax Error!";
+        updateOutputResult(result);
+        return;
+      }
+    }
 
     //if number is greater then 10 digit
     //then execute formatResult function
     result = formatResult(result);
+
     updateOutputResult(result);
 
     data.operation = [];
